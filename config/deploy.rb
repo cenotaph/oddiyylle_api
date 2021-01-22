@@ -1,12 +1,12 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.14.1"
+lock "~> 3.15.0"
 
 set :application, "oodiyylle_api"
 set :repo_url, "git@github.com:cenotaph/oodiyylle_api.git"
 set :branch, 'main'
 set :rvm_ruby_version, '2.7.2'
 set :keep_releases, 2
-set :linked_files, %w{config/database.yml  config/master.key  config/puma.rb }
+set :linked_files, %w{ config/puma.rb }
 set :linked_dirs, %w{ log shared config/credentials tmp}
 set :deploy_to, "/var/www/oodiyylle/api"
 set :assets_roles, [:web, :app]
@@ -20,6 +20,7 @@ set :puma_error_log,  "#{release_path}/log/puma.access.log"
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
+
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
   task :make_dirs do
@@ -29,7 +30,7 @@ namespace :puma do
     end
   end
 
-  before :start, :make_dirs
+  before 'deploy:started', 'puma:make_dirs'
 end
 
 
@@ -38,8 +39,8 @@ namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
     on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
+      unless `git rev-parse HEAD` == `git rev-parse origin/main`
+        puts "WARNING: HEAD is not the same as origin/main"
         puts "Run `git push` to sync changes."
         exit
       end
