@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/seuros/capistrano-puma.git
+  revision: d4ac7b9950ddc53835f661c7761ad3e904c48c65
+  specs:
+    capistrano3-puma (5.0.2)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (>= 4.0, < 6.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -95,10 +104,6 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano3-puma (5.0.2)
-      capistrano (~> 3.7)
-      capistrano-bundler
-      puma (>= 4.0, < 6.0)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
     erubi (1.10.0)
@@ -198,7 +203,7 @@ DEPENDENCIES
   capistrano
   capistrano-rails
   capistrano-rvm
-  capistrano3-puma
+  capistrano3-puma!
   jsonapi-serializer
   listen (~> 3.3)
   pg

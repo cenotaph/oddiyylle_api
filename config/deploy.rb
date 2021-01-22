@@ -6,8 +6,8 @@ set :repo_url, "git@github.com:cenotaph/oodiyylle_api.git"
 set :branch, 'main'
 set :rvm_ruby_version, '2.7.2'
 set :keep_releases, 2
-set :linked_files, %w{ config/puma.rb }
-set :linked_dirs, %w{ log shared config/credentials tmp}
+set :linked_files, %w{ config/puma.rb config/database.yml }
+set :linked_dirs, %w{ log shared config/credentials tmp/pids tmp/sockets }
 set :deploy_to, "/var/www/oodiyylle/api"
 set :assets_roles, [:web, :app]
 set :puma_threads,    [1, 2]
@@ -50,17 +50,17 @@ namespace :deploy do
   desc 'Initial Deploy'
   task :initial do
     on roles(:app) do
-      before 'deploy:restart', 'puma:start'
+      # before 'deploy:restart', 'puma:start'
       invoke 'deploy'
     end
   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:start'
-    end
-  end
+  # desc 'Restart application'
+  # task :restart do
+  #   on roles(:app), in: :sequence, wait: 5 do
+  #     invoke 'puma:start'
+  #   end
+  # end
 
 
   before :starting,     :check_revision
