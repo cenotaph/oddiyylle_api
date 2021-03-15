@@ -18,6 +18,17 @@ class EntriesController < ApplicationController
     end
   end
 
+  def index
+    @entries = Entry.all
+    render json: EntrySerializer.new(@entries).serializable_hash.to_json, status: :ok
+  end
+
+  def csv
+    require 'csv'
+    send_data Entry.to_csv, filename: "entries-#{Date.today}.csv" 
+  end
+  
+
   def show
     @entry = Entry.find_by(cookie: params[:id])
     Rails.logger.error @entry.inspect
@@ -44,8 +55,12 @@ class EntriesController < ApplicationController
         render json: EntrySerializer.new(@entry).serializable_hash.to_json, status: :ok
       else
         if @entry.update(entry_params)
+          # @entry.ysound.attach(params[:ysound]) unless params[:ysound] == "_destroy"
+          # @entry.yword.attach(params[:yword]) unless params[:yword] == "_destroy"
+          # @entry.homestory.attach(params[:homestory]) unless params[:homestory] == "_destroy"
           render json: EntrySerializer.new(@entry).serializable_hash.to_json, status: :ok
         else
+
           respond_with_errors(@entry)
         end
       end
@@ -55,7 +70,7 @@ class EntriesController < ApplicationController
   protected
 
   def entry_params
-    params.permit(:id, :name, :email, :contact_details, :anonymous, :comments, :cookie, :submitted, :yword, :ysound, :homestory)
+    params.permit(:id, :name, :email, :municipality, :contact_details, :anonymous, :comments, :cookie, :submitted, :yword, :ysound, :homestory)
   end
   
 
